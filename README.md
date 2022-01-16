@@ -9,5 +9,5 @@ determine the computer's move.
 # What to expect:
 1. The code will prompt the user if they would like to go first in the game.
 2. The code will prompt the user to determine how long the computer will be able to think about their move.
-3. Once all inputs are entered, the 4-in-a-line will start where each player interchange moves.
+3. Once all inputs are entered, the 4-in-a-line game will start where each player will interchange moves.
 4. The game will continue until either player gets four in a row horizontally or vertically or until all the spaces of the board are filled up.
