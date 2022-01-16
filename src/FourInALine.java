@@ -4,7 +4,7 @@ public class FourInALine {
         boolean first;
         int time;
         Scanner scanner = new Scanner(System.in);
-        Board playBoard = new Board();
+        Board gameBoard = new Board();
 
         while (true) {
             System.out.print("Do you want to go first (y/n)? ");
@@ -19,7 +19,6 @@ public class FourInALine {
                 System.out.println("Not an option.");
             }
         }
-
         while (true) {
             System.out.print("How many seconds should the computer think? ");
             try {
@@ -29,85 +28,74 @@ public class FourInALine {
                 System.out.println("Not a number.");
             }
         }
-
-        playBoard.printBoard();
-
+        gameBoard.printBoard();
         int[] userMove = null;
-
         if (first) {
             while (true) {
                 System.out.print("Enter your move: ");
                 String input = scanner.nextLine();
-                userMove = moveToIndeces(input);
+                userMove = moveToIndex(input);
                 if (userMove == null) {
-                    System.out.println("That isn't a valid move!");
-                } else if (!playBoard.testMove(userMove)) {
-                    System.out.println("That isn't a valid move!");
+                    System.out.println("Not a valid move!");
+                } else if (!gameBoard.testMove(userMove)) {
+                    System.out.println("Not a valid move!");
                 } else if (userMove[0] < 0 || userMove[0] > 7 || userMove[1] < 0 || userMove[1] > 7) {
-                    System.out.println("That isn't a valid move!");
+                    System.out.println("Not a valid move!");
                 } else {
                     break;
                 }
             }
-
-            playBoard.makeMove(userMove, 'o');
-
-            playBoard.printBoard();
+            gameBoard.makeMove(userMove, 'o');
+            gameBoard.printBoard();
         }
-
         while (true) {
-            //do computer move
+            //This will calculate the computer's move and make the designated move
             System.out.println("Calculating computer move...");
-            Algorithm a = new Algorithm(playBoard, time);
-
-            int[] compMove = a.getMove();
-            playBoard.makeMove(compMove, 'x');
-
-            playBoard.printBoard();
-
-            System.out.println("Computer move: " + indecesToMove(compMove));
-
-            if(playBoard.getWinner() != 0) {
-                if (playBoard.getWinner() == 3) {
+            Solve game = new Solve(gameBoard, time);
+            int[] compMove = game.getMove();
+            gameBoard.makeMove(compMove, 'x');
+            gameBoard.printBoard();
+            System.out.println("Computer move: " + indexToMove(compMove));
+            if(gameBoard.getWinner() != 0) {
+                if (gameBoard.getWinner() == 3) {
                     System.out.println("It's a Draw! Nobody Wins!");
                 } else {
-                    System.out.println(playBoard.getWinner() == 1 ? "You lost!" : "You won!");
+                    System.out.println(gameBoard.getWinner() == 1 ? "You lost!" : "You won!");
                 }
                 return;
             }
-
-            //do user move
+            //This will make take the input from the user and make the designated move
             while (true) {
                 System.out.print("Enter your move: ");
                 String input = scanner.nextLine();
-                userMove = moveToIndeces(input);
+                userMove = moveToIndex(input);
                 if (userMove == null) {
-                    System.out.println("That wasn't a valid move!");
-                } else if (!playBoard.testMove(userMove)) {
-                    System.out.println("That wasn't a valid move!");
+                    System.out.println("Not a valid move!");
+                } else if (!gameBoard.testMove(userMove)) {
+                    System.out.println("Not a valid move!");
                 } else if (userMove[0] < 0 || userMove[0] > 7 || userMove[1] < 0 || userMove[1] > 7) {
-                    System.out.println("That wasn't a valid move!");
+                    System.out.println("Not a valid move!");
                 } else {
                     break;
                 }
             }
-
-            playBoard.makeMove(userMove, 'o');
-
-            playBoard.printBoard();
-
-            if(playBoard.getWinner() != 0) {
-                if (playBoard.getWinner() == 3) {
+            gameBoard.makeMove(userMove, 'o');
+            gameBoard.printBoard();
+            if(gameBoard.getWinner() != 0) {
+                if (gameBoard.getWinner() == 3) {
                     System.out.println("It's a Draw! Nobody Wins!");
                 } else {
-                    System.out.println(playBoard.getWinner() == 1 ? "You lost!" : "You won!");
+                    System.out.println(gameBoard.getWinner() == 1 ? "You lost!" : "You won!");
                 }
                 return;
             }
         }
     }
 
-    public static int[] moveToIndeces(String input) {
+    /**
+     * This function will set the index of where to place the newest move
+     */
+    public static int[] moveToIndex(String input) {
         input = input.toLowerCase();
         if (input.length() != 2) {
             return null;
@@ -149,8 +137,7 @@ public class FourInALine {
         }
         return ret;
     }
-
-    public static String indecesToMove(int[] move) {
+    public static String indexToMove(int[] move) {
         String ret = "";
         switch (move[0]) {
             case 0:

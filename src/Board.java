@@ -22,13 +22,15 @@ public class Board {
         numMoves = moves;
         calcEvaluation();
     }
-
     public void makeMove(int[] move, char token) {
         board[move[0]][move[1]] = token;
         lastMove = move;
         numMoves++;
     }
 
+    /**
+     * This will check if the newest move is to any empty space and not one already occupied.
+     */
     public boolean testMove(int[] move) {
         if (board[move[0]][move[1]] == '-') {
             return true;
@@ -36,8 +38,12 @@ public class Board {
         return false;
     }
 
+    /**
+     * This will check if the game board has any of the winning combinations where there are either four X's or O's in a row
+     * vertically or there are four X's or O's horizontally.
+     * 1 is for the computer or player 2 winning, 2 is for the player winning, 0 is for no current winner, 3 for tie game
+     */
     public int getWinner() {
-        //1 is for the computer winning, 2 is for the player winning, 0 is for no current winner, 3 for tie game
         //horizontal cases
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 5; j++) {
@@ -48,7 +54,6 @@ public class Board {
                 }
             }
         }
-
         //vertical cases
         for (int j = 0; j < 8; j++) {
             for (int i = 0; i < 5; i++) {
@@ -59,8 +64,7 @@ public class Board {
                 }
             }
         }
-
-        //all tiles marked here means draw, otherwise game isn't done yet
+        //when all tiles are taken, games end with a draw or 3, otherwise 0 continues the game.
         return (numMoves == 64) ? 3 : 0;
     }
 
@@ -117,6 +121,10 @@ public class Board {
         return numMoves;
     }
 
+    /**
+     * This will determine the evaluation score based on whose turn it is, the number of
+     * empty spaces and the number of X's and O's
+     */
     private void calcEvaluation() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -159,7 +167,6 @@ public class Board {
                 evaluationValue += tempAdd;
             }
         }
-
         for(int i = 0; i < 8; i++) {
             int tempAdd = 0;
             for(int j = 0; j < 5; j++) {
@@ -184,7 +191,6 @@ public class Board {
             }
             evaluationValue += tempAdd;
         }
-
         for(int i = 0; i < 8; i++) {
             int tempAdd = 0;
             for(int j = 0; j < 5; j++) {

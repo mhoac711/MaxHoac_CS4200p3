@@ -1,30 +1,28 @@
 import java.util.ArrayList;
 
-public class Algorithm {
+public class Solve {
     private Board board;
     private int[] calculatedMove;
-    private long maxRuntime;
+    private long maxRunTime;
 
-    public Algorithm(Board b, int t) {
+    public Solve(Board b, int t) {
         board = b;
-        maxRuntime = System.currentTimeMillis() + t * 1000;
+        maxRunTime = System.currentTimeMillis() + t * 1000;
         for(int i = 2; i < 65; i+=2) {
             alphaBetaPrune(board, true, Integer.MIN_VALUE, Integer.MAX_VALUE, i);
         }
     }
-
-    public int[] getMove() {
-        return calculatedMove;
-    }
-
+    /**
+     * This is the implementation of the alpha-beta pruning algorithm where depending on whose turn it is
+     * will return either the highest score or the lowest score.
+     */
     private int alphaBetaPrune(Board b, boolean maxPlayer, int alpha, int beta, int depth) {
-        //Cutoff test, non-threaded
-        if(System.currentTimeMillis() >= maxRuntime || depth == 0) {
+        //this is the condition for the cut-off test where if time has exceeded or when the depth equals 0
+        if(System.currentTimeMillis() >= maxRunTime || depth == 0) {
             return b.getEvaluationValue();
         }
 
         ArrayList<Board> children = populateChildren(b, maxPlayer ? 'x' : 'o');
-
         int score = 0;
         if (maxPlayer) {
             for (Board child : children) {
@@ -48,13 +46,15 @@ public class Algorithm {
             }
             return beta;
         }
+    }
 
+    public int[] getMove() {
+        return calculatedMove;
     }
 
     private ArrayList<Board> populateChildren(Board b, char token) {
         ArrayList<Board> children = new ArrayList<Board>();
         char[][] parentBoard = b.getBoard();
-
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (parentBoard[i][j] == '-') {
@@ -72,7 +72,6 @@ public class Algorithm {
                 }
             }
         }
-
         return children;
     }
 }
